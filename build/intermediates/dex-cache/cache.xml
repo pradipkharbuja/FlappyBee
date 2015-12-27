@@ -2,11 +2,67 @@
 <items version="2" >
 
     <item
+        jar="C:\Users\Pradip Kharbuja\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-box2d\1.7.2\275914cb71c76e4d3ce1e4037cf8a9cce8f7c842\gdx-box2d-1.7.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="275914cb71c76e4d3ce1e4037cf8a9cce8f7c842">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\gdx-box2d-1.7.2-7007cd2220a65449513d791af79789828e27aa8f.jar" />
+    </item>
+    <item
+        jar="F:\Softwares\Android\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.0\support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\support-annotations-22.2.0-5ff20cd77b4509f0959e0f7b572a89719703347d.jar" />
+    </item>
+    <item
+        jar="E:\Learning\Android\FlappyBee\android\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\classes-e307d8a825bbcd24d5767c032f4c96bd0a7084a3.jar" />
+    </item>
+    <item
+        jar="E:\Learning\Android\FlappyBee\android\build\intermediates\exploded-aar\com.google.android.gms\play-services-basement\8.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="345a1b5cf5b144ce18ba6962bc66a7e2f26c1c1b">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\classes-47d9288f9322a5f9c94bde5cb41cf6c8b38eb075.jar" />
+    </item>
+    <item
         jar="E:\Learning\Android\FlappyBee\core\build\libs\core-1.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="b5e731d2a101e228c75f740854b03f4876cac27c">
-        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\debug\core-1.0-dfad9195b3191631d6bbf76b2c73ad6445f1c36d.jar" />
+        sha1="3619dc1d0ced28a2e3e84ce8b2a5718bdb9f15c6">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\core-1.0-dfad9195b3191631d6bbf76b2c73ad6445f1c36d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Pradip Kharbuja\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx\1.7.2\ccf86a454b5ce7029c243da22f432f2edca0a34e\gdx-1.7.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ccf86a454b5ce7029c243da22f432f2edca0a34e">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\gdx-1.7.2-2e20c93afe9c647c60994c3c13cc97e57f81cba1.jar" />
+    </item>
+    <item
+        jar="E:\Learning\Android\FlappyBee\android\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\8.3.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="27775d59b16610ac76f1b83693fedd9520396332">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\classes-9f786a37c2f35fe2b086731418235a954c2ef8df.jar" />
+    </item>
+    <item
+        jar="E:\Learning\Android\FlappyBee\android\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\libs\internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\internal_impl-22.2.0-fbd4d5e17774538810556f2805652462e6b5d253.jar" />
+    </item>
+    <item
+        jar="C:\Users\Pradip Kharbuja\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-backend-android\1.7.2\5211971f79423cda216422e62c1ec8684603c3b2\gdx-backend-android-1.7.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5211971f79423cda216422e62c1ec8684603c3b2">
+        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\release\gdx-backend-android-1.7.2-f110a033d215d249874a2cfad58ec432bf121d55.jar" />
     </item>
 
 </items>
