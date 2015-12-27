@@ -27,4 +27,4 @@ proguard/
 *.log
 
 # Signed
-signed/
+*.jks
