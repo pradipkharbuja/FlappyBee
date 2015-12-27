@@ -1,7 +1,8 @@
 package np.com.pradipkharbuja.flappybee.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 
 import np.com.pradipkharbuja.flappybee.FlappyBee;
 import np.com.pradipkharbuja.flappybee.sprites.Bird;
+import np.com.pradipkharbuja.flappybee.sprites.Score;
 import np.com.pradipkharbuja.flappybee.sprites.Tube;
 
 /**
@@ -24,12 +26,21 @@ public class PlayState extends State {
     private Texture bg;
     private Texture ground;
 
+    private Score score;
+
     private Vector2 groundPos1, groundPos2;
 
     private Array<Tube> tubes;
-    private Sound sound;
+    private Music sound;
 
-    private boolean isPlayed;
+    private boolean isPlaying;
+    private static  int point = 1;
+    private int delay = 0;
+
+    @Override
+    public boolean scrolled(int amount) {
+        return super.scrolled(amount);
+    }
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
@@ -47,12 +58,20 @@ public class PlayState extends State {
             tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));
         }
 
-        sound = Gdx.audio.newSound(Gdx.files.internal("start.ogg"));
+        score = new Score(cam.position.x, 20);
+
+        sound = Gdx.audio.newMusic(Gdx.files.internal("start.ogg"));
     }
 
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
+
+            if (!isPlaying) {
+                isPlaying = true;
+                point = 1;
+            }
+
             bird.jump();
         }
     }
@@ -60,10 +79,17 @@ public class PlayState extends State {
     @Override
     public void update(float dt) {
         handleInput();
-        bird.update(dt);
-        updateGround();
+        bird.fly(dt);
 
-        cam.position.x = bird.getPosition().x + 80;
+        if (!isPlaying) {
+            return;
+        }
+        bird.update(dt);
+
+        // The default position of camera is 210 and bird is 50
+        cam.position.x = bird.getPosition().x + 160;
+
+        updateGround();
 
         for (int i = 0; i < tubes.size; i++) {
             Tube tube = tubes.get(i);
@@ -73,15 +99,22 @@ public class PlayState extends State {
             }
 
             if (tube.collides(bird.getBounds())) {
-                gsm.set(new PlayState(gsm));
+                this.gameOver();
             }
         }
 
         if (bird.getPosition().y <= ground.getHeight() + GROUND_Y_OFFSET) {
-            gsm.set(new PlayState(gsm));
+            this.gameOver();
         }
 
+        score.reposition(cam.position.x, 10);
+
         cam.update();
+
+        if(delay++ > 10) {
+            point++;
+            delay = 0;
+        }
     }
 
     @Override
@@ -98,12 +131,11 @@ public class PlayState extends State {
 
         sb.draw(ground, groundPos1.x, groundPos1.y);
         sb.draw(ground, groundPos2.x, groundPos2.y);
-        sb.end();
 
-        if (!isPlayed) {
-            sound.play(0.5f);
-            isPlayed = true;
-        }
+        sb.draw(score.getTextureScore(), score.getPosition().x, score.getPosition().y);
+        this.displayScore(sb, cam);
+
+        sb.end();
     }
 
     @Override
@@ -111,21 +143,53 @@ public class PlayState extends State {
         bg.dispose();
         bird.dispose();
         ground.dispose();
-        sound.dispose();
 
         for (Tube tube : tubes) {
             tube.dispose();
         }
-        System.out.println("PlayState disposed");
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                    System.out.println("PlayState disposed");
+                    sound.dispose();
+                } catch (Exception ex) {
+
+                }
+            }
+        });
+        t.start();
     }
 
     private void updateGround() {
+
         if (cam.position.x - (cam.viewportWidth / 2) > groundPos1.x + ground.getWidth()) {
             groundPos1.add(ground.getWidth() * 2, 0);
         }
 
         if (cam.position.x - (cam.viewportWidth / 2) > groundPos2.x + ground.getWidth()) {
             groundPos2.add(ground.getWidth() * 2, 0);
+        }
+    }
+
+    private void gameOver() {
+        sound.play();
+        gsm.set(new PlayState(gsm));
+    }
+
+    public void displayScore(SpriteBatch spriteBatch, Camera camera) {
+        int tempScore = point;
+        int i = 0;
+        while (tempScore > 0) {
+            int temp = tempScore % 10;
+            i++;
+            Texture texture = new Texture("score/" + temp + ".png");
+
+            spriteBatch.draw(texture, camera.position.x + 180 - i * (20), 20);
+            tempScore = tempScore / 10;
+
         }
     }
 }

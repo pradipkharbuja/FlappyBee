@@ -17,8 +17,8 @@ public class FlappyBee extends ApplicationAdapter {
         music.dispose();
     }
 
-    public static final int WIDTH = 420;
-    public static final int HEIGHT = 700;
+    public static final int WIDTH = 390;
+    public static final int HEIGHT = 650;
 
     public static final String TITLE = "Flappy Bee";
 
@@ -34,8 +34,7 @@ public class FlappyBee extends ApplicationAdapter {
 
         music = Gdx.audio.newMusic(Gdx.files.internal("theme.mp3"));
         music.setLooping(true);
-        music.setVolume(0.5f);
-        //music.play();
+        music.play();
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
         gsm.push(new MenuState(gsm));

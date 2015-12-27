@@ -9,13 +9,13 @@ import np.com.pradipkharbuja.flappybee.FlappyBee;
 /**
  * Created by Pradip Kharbuja on 12/23/2015.
  */
-public class MenuState extends State{
+public class MenuState extends State {
 
     private Texture background;
-    private Texture playBtn;
+    // private Texture playBtn;
     private Texture textureLogo;
-    private Texture textureDialog;
-    private Texture textureSound;
+    private Texture textureTouch;
+    // private Texture textureSound;
 
     public MenuState(GameStateManager gsm) {
         super(gsm);
@@ -23,11 +23,11 @@ public class MenuState extends State{
         cam.setToOrtho(false, FlappyBee.WIDTH, FlappyBee.HEIGHT);
 
         background = new Texture("bg.png");
-        playBtn = new Texture("playbtn.png");
+        //playBtn = new Texture("playbtn.png");
         textureLogo = new Texture("logo.png");
-        textureDialog = new Texture("dialog.png");
+        textureTouch = new Texture("touch.png");
 
-        textureSound = new Texture("sound_on.png");
+        // textureSound = new Texture("sound_on.png");
     }
 
     @Override
@@ -49,9 +49,7 @@ public class MenuState extends State{
 
         sb.draw(background, 0, 0);
         sb.draw(textureLogo, cam.position.x - textureLogo.getWidth() / 2, cam.position.y + 100);
-        sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);
-        sb.draw(textureSound, cam.position.x - textureSound.getWidth() / 2, cam.position.y - 80);
-        sb.draw(textureDialog, cam.position.x - textureDialog.getWidth() / 2, cam.position.y - 250);
+        sb.draw(textureTouch, cam.position.x - textureTouch.getWidth() / 2, cam.position.y - 150);
 
         sb.end();
     }
@@ -60,7 +58,7 @@ public class MenuState extends State{
     public void dispose() {
         //to prevent memory leak
         background.dispose();
-        playBtn.dispose();
+        //playBtn.dispose();
         textureLogo.dispose();
 
         System.out.println("Menu state disposed");

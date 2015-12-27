@@ -2,32 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Pradip Kharbuja\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-backend-android\1.7.2\5211971f79423cda216422e62c1ec8684603c3b2\gdx-backend-android-1.7.2.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="5211971f79423cda216422e62c1ec8684603c3b2">
-        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\debug\gdx-backend-android-1.7.2-f110a033d215d249874a2cfad58ec432bf121d55.jar" />
-    </item>
-    <item
         jar="E:\Learning\Android\FlappyBee\core\build\libs\core-1.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="5b216cbc222f52500de905a84815482b67343ad2">
+        sha1="b5e731d2a101e228c75f740854b03f4876cac27c">
         <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\debug\core-1.0-dfad9195b3191631d6bbf76b2c73ad6445f1c36d.jar" />
-    </item>
-    <item
-        jar="C:\Users\Pradip Kharbuja\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx-box2d\1.7.2\275914cb71c76e4d3ce1e4037cf8a9cce8f7c842\gdx-box2d-1.7.2.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="275914cb71c76e4d3ce1e4037cf8a9cce8f7c842">
-        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\debug\gdx-box2d-1.7.2-7007cd2220a65449513d791af79789828e27aa8f.jar" />
-    </item>
-    <item
-        jar="C:\Users\Pradip Kharbuja\.gradle\caches\modules-2\files-2.1\com.badlogicgames.gdx\gdx\1.7.2\ccf86a454b5ce7029c243da22f432f2edca0a34e\gdx-1.7.2.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="ccf86a454b5ce7029c243da22f432f2edca0a34e">
-        <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\debug\gdx-1.7.2-2e20c93afe9c647c60994c3c13cc97e57f81cba1.jar" />
     </item>
 
 </items>

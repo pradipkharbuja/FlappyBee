@@ -37,9 +37,11 @@ public class Bird {
         flap = Gdx.audio.newSound(Gdx.files.internal("wing.mp3"));
     }
 
-    public void update(float dt) {
+    public void fly(float dt){
         birdAnimation.update(dt);
+    }
 
+    public void update(float dt) {
         if (position.y > 0) {
             velocity.add(0, GRAVITY, 0);
         }
@@ -64,7 +66,7 @@ public class Bird {
 
     public void jump() {
         velocity.y = 250;
-        flap.play(0.5f); //0.5f is volume level
+        flap.play();
     }
 
     public Rectangle getBounds() {
