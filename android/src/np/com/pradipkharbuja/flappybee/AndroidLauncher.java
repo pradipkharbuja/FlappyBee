@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -21,8 +21,7 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
 
         // Create the layout
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
+        RelativeLayout layout = new RelativeLayout(this);
 
         // Do the stuff that initialize() would do for you
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -38,20 +37,22 @@ public class AndroidLauncher extends AndroidApplication {
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.SMART_BANNER);
 
-        //adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); // Put in your secret key here
-        adView.setAdUnitId("ca-app-pub-3539844738735929/7725607136");
+        // Test Ads
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+
+        //My Ad
+        //adView.setAdUnitId("ca-app-pub-3539844738735929/7725607136");
 
 
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
 
-        // Add the AdMob view
-        //layout.addView(adView);
-
         // Add the libgdx view
         layout.addView(gameView);
 
-        // Hook it all up
+        // Add the AdMob view
+        layout.addView(adView);
+
         setContentView(layout);
     }
 }
