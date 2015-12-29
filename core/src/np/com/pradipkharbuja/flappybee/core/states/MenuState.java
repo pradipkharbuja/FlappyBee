@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import np.com.pradipkharbuja.flappybee.core.FlappyBee;
+import np.com.pradipkharbuja.flappybee.core.sprites.ThemeSound;
 
 /**
  * Created by Pradip Kharbuja on 12/23/2015.

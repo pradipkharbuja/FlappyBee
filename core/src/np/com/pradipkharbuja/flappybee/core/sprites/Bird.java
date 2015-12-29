@@ -25,8 +25,13 @@ public class Bird {
     private static final int FRAME_COUNT = 3;
 
     private Sound flap;
+    private GameSound gameSound;
 
-    public Bird(int x, int y) {
+    private boolean blnDead;
+
+    public Bird(GameSound gameSound, int x, int y) {
+        this.gameSound = gameSound;
+
         position = new Vector3(x, y, 0);
         velocity = new Vector3(0, 0, 0);
 
@@ -37,11 +42,17 @@ public class Bird {
         flap = Gdx.audio.newSound(Gdx.files.internal("wing.mp3"));
     }
 
-    public void fly(float dt){
-        birdAnimation.update(dt);
+    public void fly(float dt) {
+        if (!blnDead) {
+            birdAnimation.update(dt);
+        }
     }
 
     public void update(float dt) {
+        if (blnDead) {
+            return;
+        }
+
         if (position.y > 0) {
             velocity.add(0, GRAVITY, 0);
         }
@@ -66,7 +77,9 @@ public class Bird {
 
     public void jump() {
         velocity.y = 250;
-        flap.play();
+        if (gameSound.isSelected()) {
+            flap.play();
+        }
     }
 
     public Rectangle getBounds() {
@@ -76,5 +89,9 @@ public class Bird {
     public void dispose() {
         bird.dispose();
         flap.dispose();
+    }
+
+    public void dead() {
+        this.blnDead = true;
     }
 }

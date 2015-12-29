@@ -73,6 +73,6 @@ public class Tube {
     }
 
     public int getTubeGap() {
-        return random.nextInt(50) + 110;
+        return random.nextInt(50) + 100;
     }
 }
