@@ -3,16 +3,18 @@ package np.com.pradipkharbuja.flappybee.core.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import np.com.pradipkharbuja.flappybee.core.FlappyBee;
+import np.com.pradipkharbuja.flappybee.core.service.DialogInterface;
 import np.com.pradipkharbuja.flappybee.core.service.HighScore;
 import np.com.pradipkharbuja.flappybee.core.sprites.Bird;
 import np.com.pradipkharbuja.flappybee.core.sprites.GameSound;
+import np.com.pradipkharbuja.flappybee.core.sprites.MyProfile;
+import np.com.pradipkharbuja.flappybee.core.sprites.PlayButton;
 import np.com.pradipkharbuja.flappybee.core.sprites.Score;
 import np.com.pradipkharbuja.flappybee.core.sprites.ThemeSound;
 import np.com.pradipkharbuja.flappybee.core.sprites.TouchToPlay;
@@ -37,30 +39,32 @@ public class PlayState extends State {
     private Vector2 textureGroundPos1, textureGroundPos2;
 
     private Array<Tube> tubes;
+
+    //Sprites
     private Music sound;
     private ThemeSound themeSound;
     private GameSound gameSound;
     private TouchToPlay touchToPlay;
+    private MyProfile myProfile;
+    private PlayButton playButton;
 
     private boolean isPlaying;
 
-    private static int point = 0;
+    public static int point = 0;
     private int delay = 0;
-
-    private Sprite spritePlay;
 
     private boolean blnTouchToPlay = false;
     private boolean blnGameOver = false;
-
-    private SpriteBatch spriteBatch;
 
     @Override
     public boolean scrolled(int amount) {
         return super.scrolled(amount);
     }
 
-    public PlayState(GameStateManager gsm) {
+    public PlayState(GameStateManager gsm, DialogInterface dialogInterface) {
         super(gsm);
+
+        this.dialog = dialogInterface;
 
         cam.setToOrtho(false, FlappyBee.WIDTH, FlappyBee.HEIGHT);
 
@@ -85,14 +89,17 @@ public class PlayState extends State {
 
         sound = Gdx.audio.newMusic(Gdx.files.internal("start.ogg"));
 
-        spritePlay = new Sprite(new Texture("play_button.png"));
-
         themeSound = new ThemeSound(cam.position.x - 150, cam.position.y - 150);
-
         themeSound.play();
+
+        playButton = new PlayButton(cam.position.x - 90, cam.position.y - 150);
+
+        myProfile = new MyProfile(cam.position.x + 70, cam.position.y - 150);
 
         touchToPlay = new TouchToPlay(cam.position.x, cam.position.y + 80);
     }
+
+    private DialogInterface dialog;
 
     @Override
     protected void handleInput() {
@@ -102,27 +109,33 @@ public class PlayState extends State {
             Vector3 input = new Vector3(x1, y1, 0);
             cam.unproject(input);
 
-            if (!isPlaying && spritePlay.getBoundingRectangle().contains(input.x, input.y)) {
-                isPlaying = true;
-                point = 0;
-                themeSound.play();
-                System.out.println("Play clicked.");
-            } else if (isPlaying && !blnTouchToPlay) {
+            if (!isPlaying) {
+                if (playButton.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
+                    isPlaying = true;
+                    point = 0;
+                    themeSound.play();
+                    System.out.println("Play clicked.");
+                } else if (myProfile.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
+                    System.out.println("My Profile");
+                    //gsm.set(new MyProfileScreen(gsm));
+                    dialog.showDialog();
+                }
+                //Theme Sound
+                else if (themeSound.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
+                    System.out.println("Theme sound");
+                    themeSound.toggle();
+                }
+
+                //Game Sound
+                else if (gameSound.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
+                    System.out.println("GAme sound");
+                    gameSound.toggle();
+                }
+            } else if (!blnTouchToPlay) {
                 System.out.println("Touch to play");
                 blnTouchToPlay = true;
-            } else if (isPlaying && blnTouchToPlay) {
+            } else if (blnTouchToPlay) {
                 bird.jump();
-            }
-            //Theme Sound
-            else if (themeSound.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
-                System.out.println("Theme sound");
-                themeSound.toggle();
-            }
-
-            //Game Sound
-            else if (gameSound.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
-                System.out.println("GAme sound");
-                gameSound.toggle();
             }
         }
     }
@@ -176,8 +189,6 @@ public class PlayState extends State {
 
     @Override
     public void render(SpriteBatch sb) {
-        this.spriteBatch = sb;
-
         sb.setProjectionMatrix(cam.combined);
 
         sb.begin();
@@ -205,12 +216,12 @@ public class PlayState extends State {
             //Score
             this.displayScore(point, sb, cam.position.x + 120, cam.position.y - 55);
 
-            spritePlay.setX(cam.position.x - spritePlay.getWidth() / 2);
-            spritePlay.setY(cam.position.y - 150);
-            sb.draw(spritePlay, spritePlay.getX(), spritePlay.getY());
+            sb.draw(playButton.getSprite(), playButton.getSprite().getX(), playButton.getSprite().getY());
 
             sb.draw(themeSound.getSprite(), themeSound.getSprite().getX(), themeSound.getSprite().getY());
             sb.draw(gameSound.getSprite(), gameSound.getSprite().getX(), gameSound.getSprite().getY());
+
+            sb.draw(myProfile.getSprite(), myProfile.getSprite().getX(), myProfile.getSprite().getY());
 
         } else if (!blnTouchToPlay) {
             sb.draw(touchToPlay.getSprite(), touchToPlay.getSprite().getX(), touchToPlay.getSprite().getY());
@@ -275,7 +286,9 @@ public class PlayState extends State {
             sound.play();
         }
 
-        gsm.set(new PlayState(gsm));
+        //dialog.postScore();
+
+        gsm.set(new PlayState(gsm, dialog));
     }
 
     public void displayScore(int score, SpriteBatch spriteBatch, float x, float y) {

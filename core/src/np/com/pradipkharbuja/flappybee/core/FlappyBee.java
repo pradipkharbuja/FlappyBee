@@ -7,10 +7,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import np.com.pradipkharbuja.flappybee.core.misc.Project;
+import np.com.pradipkharbuja.flappybee.core.service.DialogInterface;
 import np.com.pradipkharbuja.flappybee.core.states.GameStateManager;
 import np.com.pradipkharbuja.flappybee.core.states.MenuState;
+import np.com.pradipkharbuja.flappybee.core.states.PlayState;
 
 public class FlappyBee extends ApplicationAdapter {
+
+    private DialogInterface dialogInterface;
+
+    public FlappyBee(DialogInterface dialogInterface) {
+        this.dialogInterface = dialogInterface;
+    }
 
     @Override
     public void dispose() {
@@ -28,8 +36,6 @@ public class FlappyBee extends ApplicationAdapter {
 
     public static Music music;
 
-    private int delay;
-
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -39,9 +45,11 @@ public class FlappyBee extends ApplicationAdapter {
         music.setLooping(true);
 
         Gdx.gl.glClearColor(1, 0, 0, 1);
-        gsm.push(new MenuState(gsm));
+        gsm.push(new MenuState(gsm, dialogInterface));
 
         new Project();
+
+        //Gdx.input.setCatchBackKey(true);
     }
 
     @Override

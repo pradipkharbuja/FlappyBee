@@ -7,4 +7,10 @@ public class Constants {
 
     public static final String PREFS_NAME = "prefs.xml";
 
+    public static final String FULL_NAME = "full_name";
+
+    public static final String EMAIL = "email";
+
+    public static final String MOBILE_NUMBER = "mobile_number";
+
 }

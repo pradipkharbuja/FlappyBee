@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import np.com.pradipkharbuja.flappybee.core.FlappyBee;
-import np.com.pradipkharbuja.flappybee.core.sprites.ThemeSound;
+import np.com.pradipkharbuja.flappybee.core.service.DialogInterface;
 
 /**
  * Created by Pradip Kharbuja on 12/23/2015.
@@ -16,9 +16,11 @@ public class MenuState extends State {
     private Texture textureLoading;
 
     private int delay;
+    private DialogInterface dialogInterface;
 
-    public MenuState(GameStateManager gsm) {
+    public MenuState(GameStateManager gsm, DialogInterface dialogInterface) {
         super(gsm);
+        this.dialogInterface = dialogInterface;
 
         cam.setToOrtho(false, FlappyBee.WIDTH, FlappyBee.HEIGHT);
 
@@ -52,7 +54,7 @@ public class MenuState extends State {
         sb.end();
 
         if (delay > 1) {
-            gsm.set(new PlayState(gsm));
+            gsm.set(new PlayState(gsm, dialogInterface));
         }
     }
 

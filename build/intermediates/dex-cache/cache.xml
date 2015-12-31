@@ -5,7 +5,7 @@
         jar="E:\Learning\Android\FlappyBee\core\build\libs\core-1.0.jar"
         jumboMode="false"
         revision="23.0.1"
-        sha1="15b9040b32d23ff7d3015fc0908a5d707f7f3269">
+        sha1="673fe46ea43944d1fb23a1fb39ecf87c33e2626c">
         <dex dex="E:\Learning\Android\FlappyBee\android\build\intermediates\pre-dexed\debug\core-1.0-dfad9195b3191631d6bbf76b2c73ad6445f1c36d.jar" />
     </item>
 
