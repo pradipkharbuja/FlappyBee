@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
 import np.com.pradipkharbuja.flappybee.core.FlappyBee;
+import np.com.pradipkharbuja.flappybee.core.service.CallOutLocation;
 import np.com.pradipkharbuja.flappybee.core.service.DialogInterface;
 import np.com.pradipkharbuja.flappybee.core.service.HighScore;
 import np.com.pradipkharbuja.flappybee.core.sprites.Bird;
@@ -55,6 +57,11 @@ public class PlayState extends State {
 
     private boolean blnTouchToPlay = false;
     private boolean blnGameOver = false;
+
+    private boolean topTubeTouched;
+
+    private CallOutLocation callOutLocation;
+    private Rectangle intersectedRectangle;
 
     @Override
     public boolean scrolled(int amount) {
@@ -114,31 +121,26 @@ public class PlayState extends State {
                     isPlaying = true;
                     point = 0;
                     themeSound.play();
-                    System.out.println("Play clicked.");
                 } else if (myProfile.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
-                    System.out.println("My Profile");
-                    //gsm.set(new MyProfileScreen(gsm));
                     dialog.showDialog();
                 }
                 //Theme Sound
                 else if (themeSound.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
-                    System.out.println("Theme sound");
                     themeSound.toggle();
                 }
-
                 //Game Sound
                 else if (gameSound.getSprite().getBoundingRectangle().contains(input.x, input.y)) {
-                    System.out.println("GAme sound");
                     gameSound.toggle();
                 }
             } else if (!blnTouchToPlay) {
-                System.out.println("Touch to play");
                 blnTouchToPlay = true;
             } else if (blnTouchToPlay) {
                 bird.jump();
             }
         }
     }
+
+    private boolean blnGroundGameOver = false;
 
     @Override
     public void update(float dt) {
@@ -168,12 +170,16 @@ public class PlayState extends State {
                 tube.reposition(tube.getPosTopTube().x + ((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
             }
 
-            if (tube.collides(bird.getBounds())) {
+            if (tube.collides(bird)) {
+                topTubeTouched = tube.isTopTubeTouched();
+                callOutLocation = tube.getCallOutLocation();
+                this.intersectedRectangle = tube.getIntersectedRectangle();
                 this.gameOver();
             }
         }
 
         if (bird.getPosition().y <= textureGround.getHeight() + textureGround_Y_OFFSET) {
+            blnGroundGameOver = true;
             this.gameOver();
         }
 
@@ -228,7 +234,39 @@ public class PlayState extends State {
         }
 
         if (blnGameOver) {
-            sb.draw(new Texture("empty_star.png"), bird.getPosition().x + 20, bird.getPosition().y);
+            sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
+
+            Texture callout = new Texture("callout.png");
+            if (blnGroundGameOver) {
+                sb.draw(callout, bird.getPosition().x + 10, bird.getPosition().y - 20);
+            } else {
+                float x = bird.getPosition().x;
+                float y = bird.getPosition().y;
+
+                if (topTubeTouched) {
+                    if (callOutLocation == CallOutLocation.LEFT) {
+                        x += 30; y -= 15;
+                    } else if (callOutLocation == CallOutLocation.TOP) {
+                        x += 10; y += 0;
+                    } else if(callOutLocation == CallOutLocation.TOP_RIGHT){
+                        x -= 20; y += 10;
+                    } else {
+                        x += 20; y += 0;
+                    }
+                } else {
+                    if (callOutLocation == CallOutLocation.LEFT) {
+                        x += 30; y -= 10;
+                    } else if (callOutLocation == CallOutLocation.TOP) {
+                        x += 10; y -= 30;
+                    } else if(callOutLocation == CallOutLocation.TOP_RIGHT){
+                        x -= 20; y -= 30;
+                    } else { //top left
+                        x += 20; y -= 20;
+                    }
+                }
+                sb.draw(callout, x, y);
+            }
+
         } else if (isPlaying) {
             sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
         }
@@ -238,6 +276,20 @@ public class PlayState extends State {
 
     @Override
     public void dispose() {
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        t.start();
+
 
         bird.dispose();
 
@@ -249,19 +301,15 @@ public class PlayState extends State {
             tube.dispose();
         }
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000);
-                    System.out.println("PlayState disposed");
-                    sound.dispose();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
-        t.start();
+        score.dispose();
+
+        themeSound.dispose();
+        gameSound.dispose();
+        touchToPlay.dispose();
+        myProfile.dispose();
+        playButton.dispose();
+
+        sound.dispose();
     }
 
     private void updateTextureGround() {
@@ -286,9 +334,24 @@ public class PlayState extends State {
             sound.play();
         }
 
-        //dialog.postScore();
+        dialog.postScore();
 
-        gsm.set(new PlayState(gsm, dialog));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(500);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        gsm.set(new PlayState(gsm, dialog));
+                    }
+                });
+            }
+        }).start();
     }
 
     public void displayScore(int score, SpriteBatch spriteBatch, float x, float y) {

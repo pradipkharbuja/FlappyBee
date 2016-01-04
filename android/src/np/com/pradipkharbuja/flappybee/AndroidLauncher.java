@@ -2,6 +2,7 @@ package np.com.pradipkharbuja.flappybee;
 
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -11,6 +12,12 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -18,6 +25,11 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import np.com.pradipkharbuja.flappybee.core.FlappyBee;
 import np.com.pradipkharbuja.flappybee.core.misc.Constants;
@@ -47,16 +59,11 @@ public class AndroidLauncher extends AndroidApplication implements DialogInterfa
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.SMART_BANNER);
 
-        // Test Ads
-        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-
         //My Ad
-        //adView.setAdUnitId("ca-app-pub-3539844738735929/7725607136");
+        adView.setAdUnitId("ca-app-pub-3539844738735929/7725607136");
 
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-
-        //setContentView(R.layout.main_layout);
 
         // Create the layout
         RelativeLayout layout = new RelativeLayout(this);
@@ -65,7 +72,7 @@ public class AndroidLauncher extends AndroidApplication implements DialogInterfa
         layout.addView(gameView);
 
         // Add the AdMob view
-        layout.addView(adView);
+        //layout.addView(adView);
 
         setContentView(layout);
     }
@@ -138,7 +145,67 @@ public class AndroidLauncher extends AndroidApplication implements DialogInterfa
 
     @Override
     public void postScore() {
-        Toast.makeText(this, "Full Name " + preferences.getString(Constants.FULL_NAME), Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, "Score " + PlayState.point,  Toast.LENGTH_SHORT).show();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        postData();
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
+
+    private void postData() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        String url = "http://hamrobhaktapur.com/score/?";
+
+        Map<String, String> params = new HashMap<>();
+        params.put("fullName", preferences.getString(Constants.FULL_NAME));
+        params.put("email", preferences.getString(Constants.EMAIL));
+        params.put("mobileNumber", preferences.getString(Constants.MOBILE_NUMBER));
+        params.put("score", "" + PlayState.point);
+
+        for (Map.Entry entry : params.entrySet()) {
+            if (entry.getValue().toString().trim().equals("")) {
+                Toast.makeText(this, "Please complete the profile before posting data.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            url += entry.getKey() + "=" + Uri.encode(entry.getValue().toString().trim()) + "&";
+        }
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.POST, url,
+                new JSONObject(params),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        String message = "";
+                        try {
+                            boolean status = response.getBoolean("success");
+                            if (status) {
+                                message = "Your score has been posted successfully.";
+                            } else {
+                                message = "Oops! Error occurred while submitting score.";
+                            }
+                        } catch (Exception ex) {
+                            message = "Error occurred while submitting score.";
+                        }
+
+                        Toast.makeText(AndroidLauncher.this, message, Toast.LENGTH_SHORT).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(AndroidLauncher.this, "Your score couldn't be posted. Please check the network connection.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        queue.add(jsObjRequest);
     }
 }

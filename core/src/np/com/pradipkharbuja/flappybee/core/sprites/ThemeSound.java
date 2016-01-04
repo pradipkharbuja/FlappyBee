@@ -70,4 +70,8 @@ public class ThemeSound {
         this.setSprite();
         this.play();
     }
+
+    public void dispose() {
+        sprite.getTexture().dispose();
+    }
 }

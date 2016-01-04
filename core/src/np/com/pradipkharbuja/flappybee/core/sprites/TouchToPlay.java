@@ -16,15 +16,11 @@ public class TouchToPlay {
         sprite.setY(y);
     }
 
-    public void show() {
-
-    }
-
-    public void hide() {
-
-    }
-
     public Sprite getSprite() {
         return sprite;
+    }
+
+    public void dispose(){
+        sprite.getTexture().dispose();
     }
 }

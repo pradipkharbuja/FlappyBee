@@ -5,7 +5,6 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import np.com.pradipkharbuja.flappybee.core.FlappyBee;
 import np.com.pradipkharbuja.flappybee.core.misc.Constants;
 
 /**
@@ -53,5 +52,9 @@ public class GameSound {
         preferences.flush();
 
         this.setSprite();
+    }
+
+    public void dispose() {
+        sprite.getTexture().dispose();
     }
 }

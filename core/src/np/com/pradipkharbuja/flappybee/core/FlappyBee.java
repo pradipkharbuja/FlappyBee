@@ -48,8 +48,6 @@ public class FlappyBee extends ApplicationAdapter {
         gsm.push(new MenuState(gsm, dialogInterface));
 
         new Project();
-
-        //Gdx.input.setCatchBackKey(true);
     }
 
     @Override

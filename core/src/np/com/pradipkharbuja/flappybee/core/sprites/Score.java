@@ -28,4 +28,8 @@ public class Score {
     public void reposition(float x, int score) {
         position = new Vector2(x - negativeX, position.y);
     }
+
+    public void dispose(){
+        textureScore.dispose();
+    }
 }
